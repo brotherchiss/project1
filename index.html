@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Status Tombol Node-RED</title>
+</head>
+<body>
+  <h1>Status Tombol</h1>
+  <div id="status">Memuat...</div>
+
+  <script>
+    async function updateStatus() {
+      try {
+        const res = await fetch('https://<NODE-RED-PUBLIC-URL>/status');
+        const data = await res.json();
+        document.getElementById('status').innerText = data.tombol;
+      } catch(err) {
+        document.getElementById('status').innerText = 'Gagal memuat';
+      }
+    }
+    setInterval(updateStatus, 1000);
+    updateStatus();
+  </script>
+</body>
+</html>
