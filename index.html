@@ -2,63 +2,96 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Status Tombol Node-RED</title>
+<title>Dashboard LED Node-RED</title>
 <style>
-  body { font-family: Arial; text-align: center; margin-top: 50px; background: #f0f0f0; }
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+    background: #f4f4f4;
+  }
   h1 { color: #333; }
   #led {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     background-color: grey;
-    margin: 50px auto;
+    margin: 30px auto;
     box-shadow: 0 0 10px #000;
     transition: background 0.3s, box-shadow 0.3s;
   }
-  #status { font-size: 1.5em; color: #333; }
+  #status {
+    font-size: 1.5em;
+    margin: 20px 0;
+    color: #333;
+  }
+  button {
+    font-size: 1em;
+    padding: 10px 25px;
+    margin: 5px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+  }
+  #btnOn { background-color: #28a745; }
+  #btnOff { background-color: #dc3545; }
+  button:hover { opacity: 0.8; }
 </style>
 </head>
 <body>
-<h1>Status Tombol</h1>
-<div id="led"></div>
-<div id="status">Memuat...</div>
+  <h1>Dashboard LED Node-RED</h1>
+  <div id="led"></div>
+  <div id="status">Memuat...</div>
+  <button id="btnOn">NYALAKAN</button>
+  <button id="btnOff">MATIKAN</button>
 
-<!-- MQTT.js -->
-<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-<script>
-  const ledDiv = document.getElementById('led');
-  const statusDiv = document.getElementById('status');
+  <!-- MQTT.js -->
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <script>
+    const ledDiv = document.getElementById('led');
+    const statusDiv = document.getElementById('status');
+    const btnOn = document.getElementById('btnOn');
+    const btnOff = document.getElementById('btnOff');
 
-  // Koneksi ke broker MQTT publik via WebSocket
-  const client = mqtt.connect('wss://test.mosquitto.org:8081/mqtt');
+    // Koneksi ke broker MQTT publik via WebSocket
+    const client = mqtt.connect('wss://test.mosquitto.org:8081/mqtt');
 
-  client.on('connect', () => {
-    console.log('Terhubung ke broker MQTT');
-    statusDiv.innerText = 'Terhubung ke broker';
-    client.subscribe('LED/TOI');
-  });
+    client.on('connect', () => {
+      console.log('Terhubung ke broker MQTT');
+      statusDiv.innerText = 'Terhubung ke broker';
+      client.subscribe('LED/TOI'); // subscribe topik LED/TOI
+    });
 
-  client.on('error', (err) => {
-    console.error('Koneksi gagal:', err);
-    statusDiv.innerText = 'Gagal koneksi broker';
-  });
+    client.on('error', (err) => {
+      console.error('Koneksi gagal:', err);
+      statusDiv.innerText = 'Gagal koneksi broker';
+    });
 
-  client.on('message', (topic, message) => {
-    const payload = message.toString();
-    console.log('Diterima:', topic, payload);
+    // Menerima pesan MQTT
+    client.on('message', (topic, message) => {
+      const payload = message.toString();
+      if(payload === 'ON') {
+        ledDiv.style.backgroundColor = 'yellow';
+        ledDiv.style.boxShadow = '0 0 30px yellow';
+        statusDiv.innerText = 'LED MENYALA';
+      } else if(payload === 'OFF') {
+        ledDiv.style.backgroundColor = 'grey';
+        ledDiv.style.boxShadow = '0 0 10px #000';
+        statusDiv.innerText = 'LED MATI';
+      } else {
+        statusDiv.innerText = 'Payload tidak dikenal';
+      }
+    });
 
-    if (payload === 'ON') {
-      ledDiv.style.backgroundColor = 'yellow';
-      ledDiv.style.boxShadow = '0 0 30px yellow';
-      statusDiv.innerText = 'LED MENYALA';
-    } else if (payload === 'OFF') {
-      ledDiv.style.backgroundColor = 'grey';
-      ledDiv.style.boxShadow = '0 0 10px #000';
-      statusDiv.innerText = 'LED MATI';
-    } else {
-      statusDiv.innerText = 'Payload tidak dikenal';
-    }
-  });
-</script>
+    // Tombol web untuk mengirim perintah ke MQTT
+    btnOn.addEventListener('click', () => {
+      client.publish('LED/TOI', 'ON');
+    });
+
+    btnOff.addEventListener('click', () => {
+      client.publish('LED/TOI', 'OFF');
+    });
+  </script>
 </body>
 </html>
