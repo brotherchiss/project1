@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Status Tombol Node-RED</title>
+  <style>
+    body { font-family: Arial; text-align: center; margin-top: 50px; }
+    #status { font-size: 2em; padding: 20px; border: 2px solid #333; display: inline-block; }
+  </style>
+</head>
+<body>
+  <h1>Status Tombol Node-RED</h1>
+  <div id="status">Memuat...</div>
+
+  <script>
+    async function updateStatus() {
+      try {
+        const response = await fetch('https://<NODE-RED-URL>/status'); // ganti dengan URL Node-RED
+        const data = await response.json();
+        document.getElementById('status').innerText = data.tombol; // ON atau OFF
+      } catch (err) {
+        document.getElementById('status').innerText = 'Gagal memuat';
+      }
+    }
+
+    setInterval(updateStatus, 1000); // update setiap 1 detik
+    updateStatus();
+  </script>
+</body>
+</html>
