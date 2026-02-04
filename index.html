@@ -2,9 +2,9 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Status LED Node-RED</title>
+<title>Status Tombol Node-RED</title>
 <style>
-  body { font-family: Arial; text-align: center; margin-top: 50px; background-color: #f0f0f0; }
+  body { font-family: Arial; text-align: center; margin-top: 50px; background: #f0f0f0; }
   h1 { color: #333; }
   #led {
     width: 100px;
@@ -13,54 +13,52 @@
     background-color: grey;
     margin: 50px auto;
     box-shadow: 0 0 10px #000;
-    transition: background-color 0.3s, box-shadow 0.3s;
+    transition: background 0.3s, box-shadow 0.3s;
   }
   #status { font-size: 1.5em; color: #333; }
 </style>
 </head>
 <body>
-  <h1>Status LED Node-RED</h1>
-  <div id="led"></div>
-  <div id="status">Memuat...</div>
+<h1>Status Tombol</h1>
+<div id="led"></div>
+<div id="status">Memuat...</div>
 
-  <!-- mqtt.js via CDN -->
-  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-  <script>
-    // Element
-    const ledDiv = document.getElementById('led');
-    const statusDiv = document.getElementById('status');
+<!-- MQTT.js -->
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<script>
+  const ledDiv = document.getElementById('led');
+  const statusDiv = document.getElementById('status');
 
-    // Koneksi ke broker MQTT publik via WebSocket
-    const client = mqtt.connect('wss://test.mosquitto.org:8081/mqtt');
+  // Koneksi ke broker MQTT publik via WebSocket
+  const client = mqtt.connect('wss://test.mosquitto.org:8081/mqtt');
 
-    client.on('connect', () => {
-      console.log('Terhubung ke broker MQTT');
-      statusDiv.innerText = 'Terhubung ke broker';
-      client.subscribe('LED/TOI'); // subscribe topik LED/TOI
-    });
+  client.on('connect', () => {
+    console.log('Terhubung ke broker MQTT');
+    statusDiv.innerText = 'Terhubung ke broker';
+    client.subscribe('LED/TOI');
+  });
 
-    client.on('error', (err) => {
-      console.error('Gagal koneksi:', err);
-      statusDiv.innerText = 'Gagal koneksi broker';
-    });
+  client.on('error', (err) => {
+    console.error('Koneksi gagal:', err);
+    statusDiv.innerText = 'Gagal koneksi broker';
+  });
 
-    // Saat menerima pesan MQTT
-    client.on('message', (topic, message) => {
-      const payload = message.toString();
-      console.log('Received:', topic, payload);
+  client.on('message', (topic, message) => {
+    const payload = message.toString();
+    console.log('Diterima:', topic, payload);
 
-      if (payload === 'ON') {
-        ledDiv.style.backgroundColor = 'yellow';
-        ledDiv.style.boxShadow = '0 0 30px yellow';
-        statusDiv.innerText = 'LED MENYALA';
-      } else if (payload === 'OFF') {
-        ledDiv.style.backgroundColor = 'grey';
-        ledDiv.style.boxShadow = '0 0 10px #000';
-        statusDiv.innerText = 'LED MATI';
-      } else {
-        statusDiv.innerText = 'Payload tidak dikenal';
-      }
-    });
-  </script>
+    if (payload === 'ON') {
+      ledDiv.style.backgroundColor = 'yellow';
+      ledDiv.style.boxShadow = '0 0 30px yellow';
+      statusDiv.innerText = 'LED MENYALA';
+    } else if (payload === 'OFF') {
+      ledDiv.style.backgroundColor = 'grey';
+      ledDiv.style.boxShadow = '0 0 10px #000';
+      statusDiv.innerText = 'LED MATI';
+    } else {
+      statusDiv.innerText = 'Payload tidak dikenal';
+    }
+  });
+</script>
 </body>
 </html>
