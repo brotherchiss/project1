@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - AGRIOT-CLASSY</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #134e5e 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Animated Background Elements */
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      animation: float 20s infinite ease-in-out;
+    }
+
+    .bg-circle:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      top: -100px;
+      left: -100px;
+      animation-delay: 0s;
+    }
+
+    .bg-circle:nth-child(2) {
+      width: 400px;
+      height: 400px;
+      bottom: -150px;
+      right: -150px;
+      animation-delay: 5s;
+    }
+
+    .bg-circle:nth-child(3) {
+      width: 200px;
+      height: 200px;
+      top: 50%;
+      left: 50%;
+      animation-delay: 10s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(30px, 30px) rotate(90deg); }
+      50% { transform: translate(-20px, 50px) rotate(180deg); }
+      75% { transform: translate(40px, -30px) rotate(270deg); }
+    }
+
+    /* Grid Pattern Overlay */
+    .grid-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+    }
+
+    .container {
+      display: flex;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Left Side - Branding */
+    .brand-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      color: white;
+      text-align: center;
+    }
+
+    .logo-container {
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .logo-icon {
+      font-size: 80px;
+      color: #4ade80;
+      text-shadow: 0 0 30px rgba(74, 222, 128, 0.5);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+
+    .brand-name {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #4ade80, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .brand-tagline {
+      font-size: 18px;
+      font-weight: 300;
+      opacity: 0.9;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    .features {
+      display: flex;
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .feature-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .feature-icon {
+      font-size: 40px;
+      color: #4ade80;
+    }
+
+    .feature-text {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    /* Right Side - Login Form */
+    .login-section {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+
+    .login-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 50px;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .login-header h2 {
+      color: #1e3c72;
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .login-header p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-wrapper i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #666;
+      font-size: 18px;
+      transition: color 0.3s;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 15px 15px 15px 50px;
+      border: 2px solid #e1e1e1;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.3s;
+      background: #f8f9fa;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #2a5298;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(42, 82, 152, 0.1);
+    }
+
+    .form-group input:focus + i,
+    .input-wrapper:focus-within i {
+      color: #2a5298;
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #666;
+      cursor: pointer;
+    }
+
+    .remember-me input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: #2a5298;
+    }
+
+    .forgot-password {
+      color: #2a5298;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .forgot-password:hover {
+      color: #1e3c72;
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 10px 30px rgba(30, 60, 114, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-login::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(30, 60, 114, 0.4);
+    }
+
+    .btn-login:hover::before {
+      left: 100%;
+    }
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 30px 0;
+      color: #999;
+      font-size: 14px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e1e1e1;
+    }
+
+    .divider span {
+      padding: 0 15px;
+    }
+
+    .footer-text {
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      margin-top: 30px;
+    }
+
+    .footer-text a {
+      color: #2a5298;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer-text a:hover {
+      text-decoration: underline;
+    }
+
+    /* IoT Animation Icons */
+    .iot-icons {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .iot-icon {
+      position: absolute;
+      font-size: 24px;
+      color: rgba(255, 255, 255, 0.1);
+      animation: drift 15s infinite linear;
+    }
+
+    @keyframes drift {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 968px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .brand-section {
+        padding: 30px 20px;
+      }
+
+      .brand-name {
+        font-size: 36px;
+      }
+
+      .features {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .login-section {
+        padding: 20px;
+      }
+
+      .login-card {
+        padding: 40px 30px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .brand-name {
+        font-size: 28px;
+      }
+
+      .brand-tagline {
+        font-size: 14px;
+      }
+
+      .logo-icon {
+        font-size: 60px;
+      }
+
+      .login-card {
+        padding: 30px 20px;
+      }
+
+      .features {
+        gap: 20px;
+      }
+
+      .feature-icon {
+        font-size: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Elements -->
+  <div class="bg-circle"></div>
+  <div class="bg-circle"></div>
+  <div class="bg-circle"></div>
+  <div class="grid-overlay"></div>
+
+  <!-- Floating IoT Icons -->
+  <div class="iot-icons" id="iotIcons"></div>
+
+  <div class="container">
+    <!-- Left Side - Branding -->
+    <div class="brand-section">
+      <div class="logo-container">
+        <i class="fas fa-seedling logo-icon"></i>
+      </div>
+      <h1 class="brand-name">AGRIOT-CLASSY</h1>
+      <p class="brand-tagline">Platform Monitoring & Kendali IoT Terpadu<br>untuk Smart Farming & Smart Classroom</p>
+      
+      <div class="features">
+        <div class="feature-item">
+          <i class="fas fa-leaf feature-icon"></i>
+          <span class="feature-text">Smart Farming</span>
+        </div>
+        <div class="feature-item">
+          <i class="fas fa-chalkboard-teacher feature-icon"></i>
+          <span class="feature-text">Smart Classroom</span>
+        </div>
+        <div class="feature-item">
+          <i class="fas fa-wifi feature-icon"></i>
+          <span class="feature-text">IoT Monitoring</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side - Login Form -->
+    <div class="login-section">
+      <div class="login-card">
+        <div class="login-header">
+          <h2>Selamat Datang</h2>
+          <p>Silakan login untuk mengakses dashboard</p>
+        </div>
+
+        <form id="loginForm" action="index.html" method="GET">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <div class="input-wrapper">
+              <input type="text" id="username" name="username" placeholder="Masukkan username" required autocomplete="username">
+              <i class="fas fa-user"></i>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrapper">
+              <input type="password" id="password" name="password" placeholder="Masukkan password" required autocomplete="current-password">
+              <i class="fas fa-lock"></i>
+            </div>
+          </div>
+
+          <div class="form-options">
+            <label class="remember-me">
+              <input type="checkbox" name="remember">
+              <span>Ingat saya</span>
+            </label>
+            <a href="#" class="forgot-password">Lupa password?</a>
+          </div>
+
+          <button type="submit" class="btn-login">
+            <i class="fas fa-sign-in-alt"></i> Masuk Dashboard
+          </button>
+        </form>
+
+        <div class="divider">
+          <span>atau</span>
+        </div>
+
+        <div class="footer-text">
+          Belum punya akun? <a href="#">Hubungi Administrator</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Generate floating IoT icons
+    const iotIconsContainer = document.getElementById('iotIcons');
+    const iconClasses = [
+      'fa-leaf', 'fa-cloud', 'fa-tint', 'fa-sun', 
+      'fa-wifi', 'fa-microchip', 'fa-bolt', 'fa-thermometer-half'
+    ];
+
+    function createFloatingIcon() {
+      const icon = document.createElement('i');
+      icon.className = `fas ${iconClasses[Math.floor(Math.random() * iconClasses.length)]} iot-icon`;
+      icon.style.left = Math.random() * 100 + '%';
+      icon.style.animationDuration = (Math.random() * 10 + 10) + 's';
+      icon.style.animationDelay = Math.random() * 5 + 's';
+      iotIconsContainer.appendChild(icon);
+
+      // Remove icon after animation
+      setTimeout(() => {
+        icon.remove();
+      }, 20000);
+    }
+
+    // Create initial icons
+    for (let i = 0; i < 15; i++) {
+      setTimeout(createFloatingIcon, i * 500);
+    }
+
+    // Continue creating icons
+    setInterval(createFloatingIcon, 2000);
+
+    // Form submission handler
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const btn = document.querySelector('.btn-login');
+      
+      // Show loading state
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+      btn.disabled = true;
+      
+      // Simulate login process (replace with actual authentication)
+      setTimeout(() => {
+        // Store user info (for demo purposes)
+        localStorage.setItem('user', username);
+        
+        // Redirect to dashboard
+        window.location.href = 'index.html';
+      }, 1500);
+    });
+
+    // Password visibility toggle (optional enhancement)
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById('password');
+      const toggleIcon = passwordInput.nextElementSibling;
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.remove('fa-lock');
+        toggleIcon.classList.add('fa-lock-open');
+      } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.remove('fa-lock-open');
+        toggleIcon.classList.add('fa-lock');
+      }
+    }
+
+    // Add click event to lock icon for password toggle
+    document.querySelector('.fa-lock').parentElement.addEventListener('click', function() {
+      // Uncomment to enable password visibility toggle
+      // togglePasswordVisibility();
+    });
+  </script>
+</body>
+</html>
